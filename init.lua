@@ -255,4 +255,8 @@ photocopier = function (pos, tab)
     i = i+1
   end
   minetest.set_node(pos, {name = "photocop:photocopieuse_inactive"})
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> 8099c8f336ff225671c8a8b37d2ec99a5d60dc58
