@@ -1,0 +1,1 @@
+Ce mod ajoute une photocopieuse à minetest. Elle permet de multiplier les messages du mod memorandum. Pour l'utiliser, insérez du papier et de l'encre ainsi qu'un message et entrez une quantité de copies.
