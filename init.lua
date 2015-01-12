@@ -28,7 +28,7 @@ minetest.register_node("photocop:photocopieuse_inactive", {
     local inv = meta:get_inventory()
     meta:set_string("infotext", "Photocopieuse")
     meta:set_string("formspec",
-      "invsize[10,11;]"..
+      "size[10,11]"..
       "list[context;phinput;2,1;1,1;]"..
       "list[context;phoutput;6,1;3,4;]"..
       "list[context;phpapin;1,4;2,1;]"..
