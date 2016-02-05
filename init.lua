@@ -75,12 +75,6 @@ minetest.register_node("photocop:photocopieuse_inactive", {
   end,
   can_dig = function(pos, player)
     local inv = minetest.get_meta(pos):get_inventory()
-    print(inv:is_empty("phinput"))
-	print(inv:is_empty("phoutput"))
-	
-	print(inv:is_empty("phinkin"))
-	print(inv:is_empty("phinkout"))
-	print(inv:is_empty("phpapin"))
 	return inv:is_empty("phinput") and inv:is_empty("phoutput") and inv:is_empty("phinkin") and inv:is_empty("phinkout") and inv:is_empty("phpapin")
   end,
 })
