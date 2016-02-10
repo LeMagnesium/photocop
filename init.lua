@@ -1,14 +1,14 @@
-minetest.register_node("photocop:photocopieuse_inactive", {
-  description = "Photocopieuse",
+minetest.register_node("photocop:photocopier", {
+  description = "Photocopier",
   drawtype = "nodebox",
   paramtype = "light",
   tiles = {
-    'photocopieuse2b.png',
-    'photocopieuse2.png',
-    'photocopieuse2.png',
-    'photocopieuse2.png',
-    'photocopieuse2.png',
-    'photocopieuse.png',
+    'photocop_photocopier2b.png',
+    'photocop_photocopier2.png',
+    'photocop_photocopier2.png',
+    'photocop_photocopier2.png',
+    'photocop_photocopier2.png',
+    'photocop_photocopier.png',
   },
   groups = {oddly_breakable_by_hand = 2},
   selection_box = {
@@ -26,7 +26,7 @@ minetest.register_node("photocop:photocopieuse_inactive", {
   on_construct = function(pos)
     local meta = minetest.get_meta(pos)
     local inv = meta:get_inventory()
-    meta:set_string("infotext", "Photocopieuse")
+    meta:set_string("infotext", "Photocopier")
     meta:set_string("formspec",
       "size[10,11]"..
       "list[context;phinput;2,1;1,1;]"..
@@ -35,9 +35,9 @@ minetest.register_node("photocop:photocopieuse_inactive", {
       "list[context;phinkin;3,4;1,1;]"..
       "list[context;phinkout;4,4;1,1;]"..
       "list[current_player;main;1,6;8,4;]"..
-      --"field[6.3,4.5;2,1;qttcopies;Copies : ;${qttcopies}]"..
+      --"field[6.3,4.5;2,1;nbcopies;Copies : ;${nbcopies}]"..
       --"button[6,5;2,1;start;Start]"..
-      "image[4,1;1,1;photocop_fleche.png]"..
+      "image[4,1;1,1;photocop_arrow.png]"..
       "image[1.5,3;1,1;default_paper.png]"..
       "image[3,3;1,1;photocop_ink.png]"..
       "image[4,3;1,1;vessels_glass_bottle_inv.png]"
@@ -45,7 +45,7 @@ minetest.register_node("photocop:photocopieuse_inactive", {
       --"image[7,3;1,1;default_paper.png^photocop_ink_level_monitor_font.png]"
     )
 	meta:set_int("tick",0)
-	meta:set_int("qttcopies",0)
+	meta:set_int("nbcopies",0)
 	meta:set_string("state","disabled")
 	
     inv:set_size("phinput",1*1)
@@ -58,7 +58,7 @@ minetest.register_node("photocop:photocopieuse_inactive", {
     if listname == "phinput" and stack:get_name() == "memorandum:letter" then return stack:get_count() end
     if listname == "phoutput" then return 0 end
     if listname == "phpapin" and stack:get_name() == "default:paper" then return stack:get_count() end
-    if listname == "phinkin" and stack:get_name() == "photocop:encre" then return stack:get_count() end
+    if listname == "phinkin" and stack:get_name() == "photocop:ink" then return stack:get_count() end
     if listname == "phinkout" then return 0 end
     return 0
   end,
@@ -79,14 +79,14 @@ minetest.register_node("photocop:photocopieuse_inactive", {
   end,
 })
 
-minetest.register_craftitem("photocop:encre", {
+minetest.register_craftitem("photocop:ink", {
   inventory_image = "photocop_ink.png",
-  description = "Cartouche d'encre",
+  description = "Ink bottle",
   stack_max = 99
 })
 
 minetest.register_craft({
-  output = "photocop:encre 50",
+  output = "photocop:ink 50",
   recipe = {
     {"default:stick"},
     {"default:coal_lump"},
@@ -95,7 +95,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-  output = "photocop:photocopieuse_inactive",
+  output = "photocop:photocopier",
   recipe = {
     {"default:steelblock", "default:glass", "default:steelblock"},
     {"default:chest", "pipeworks:sand_tube_000000", "default:chest"},
@@ -103,15 +103,12 @@ minetest.register_craft({
   }
 })
 
--- Alias vers une itemstring plus simple
-minetest.register_alias ("photocop:photocop", "photocop:photocopieuse_inactive")
-
 ---------------------------------------
------ NOYAU DU MOD | MOD'S KERNEL -----
+-----[[       MOD'S KERNEL      ]]-----
 ---------------------------------------
 
 minetest.register_abm({
-	nodenames = {"photocop:photocopieuse_inactive"},
+	nodenames = {"photocop:photocopier"},
 	interval = 1,
 	chance = 1,
 	action = function (pos)
@@ -119,15 +116,15 @@ minetest.register_abm({
 		local inv 	= meta:get_inventory()
 		
 		-- Update infotext
-		local new_infotext = "Photocopieuse"
+		local new_infotext = "Photocopier"
 		if inv:is_empty("phinput") and inv:is_empty("phpapin") and inv:is_empty("phinkin") then
-			new_infotext = "Photocopieuse"
+			new_infotext = "Photocopier"
 		elseif not inv:is_empty("phinput") and not inv:is_empty("phinkout") and not inv:is_empty("phpapin") then
-			new_infotext = "Photocopie.."
+			new_infotext = "Copying..."
 		elseif inv:is_empty("phinput") and (not inv:is_empty("phinkout") or not inv:is_empty("phoutput")) then
 			new_infotext = "Take your objects please"
 		elseif	inv:is_empty("phinput") then
-			new_infotext = "Insert paper and/or ink.."
+			new_infotext = "Insert paper and/or ink"
 		end
 		meta:set_string("infotext",new_infotext)
 		
@@ -149,13 +146,16 @@ minetest.register_abm({
 			local inkinstack	= inv:get_list("phinkin")[1]
 			local inkoutstack	= inv:get_list("phinkout")[1]
 		
-			-- Dicrease paper and ink level
+			-- Decrease paper and ink level
 			inv:remove_item	("phpapin",{name = "default:paper"})
-			inv:remove_item	("phinkin",{name = "photocop:encre"})
+			inv:remove_item	("phinkin",{name = "photocop:ink"})
 		
-			-- Add a paper, add an empty bottle and copy text
+			-- Add a pape, add an empty bottle and copy the text
 			inv:add_item("phoutput",{name = "memorandum:letter", metadata = inputstack:get_metadata()})
 			inv:add_item("phinkout",{name = "vessels:glass_bottle"})
 		end
 	end,
 })
+
+-- Legacy
+dofile(minetest.get_modpath("photocop") .. "/legacy.lua")

@@ -1,1 +1,1 @@
-Ce mod ajoute une photocopieuse à minetest. Elle permet de multiplier les messages du mod memorandum. Pour l'utiliser, insérez du papier et de l'encre ainsi qu'un message et entrez une quantité de copies.
+This mods provides a photocopier for Minetest, allowing players to copy books and memorandum letters. To use it, craft and insert ink and paper, along with a written item. Enter a number of copies and there you go.
